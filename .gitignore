@@ -1,3 +1,14 @@
+#slack config
+config.json
+
+#GAE
+.gcloudignore
+appengine_config.py
+app.yaml 
+
+# IntelliJ
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
