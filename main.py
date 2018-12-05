@@ -11,11 +11,15 @@ flask_slack = FlaskSlack(slack)
 @app.route('/slack/endpoint', methods=["POST"])
 # set verify_signature to False if you want to do some local testing
 @flask_slack.slack_decorator(response_type=ResponseType.IN_CHANNEL, verify_signature=True)
-def do_the_thing(form_content):
-    text_response = f"did the thing on content: {form_content}"
+def get_channel_member_ids(form_content):
+    channel_id = form_content["channel_id"]
+    members_form_content = slack.try_api_call("conversations.members", channel=channel_id)
+    channel_member_ids = members_form_content["members"]
+
+    text_response = f"The channel_member_ids for channel_id {channel_id} is: {channel_member_ids}"
+    print(text_response)
     return {'text': text_response}
 
 
 if __name__ == "__main__":
     app.run(host="localhost")
-
