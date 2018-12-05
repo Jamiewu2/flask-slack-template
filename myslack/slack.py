@@ -4,14 +4,29 @@ import json
 import os
 import sys
 import time
+from enum import Enum
 
 from slackclient import SlackClient
+
+
+class ResponseType(Enum):
+    """
+    https://api.slack.com/docs/interactive-message-field-guide
+    """
+    IN_CHANNEL = "in_channel"
+    EPHEMERAL = "ephemeral"
 
 
 class Slack:
     def __init__(self, slack_oauth_token: str, slack_signing_secret: str):
         self.slack_client = SlackClient(slack_oauth_token)
         self.slack_signing_secret = slack_signing_secret
+
+    def try_api_call(self, api_call_method, **kwargs):
+        response = self.slack_client.api_call(api_call_method, **kwargs)
+        if "error" in response:
+            raise Exception("Error occurred during api call", response)
+        return response
 
     def verify_signature(self, timestamp, signature, raw_body: bytes):
         """
