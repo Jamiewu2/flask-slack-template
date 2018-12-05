@@ -36,13 +36,23 @@ def delayed_message(func: callable, response_type: ResponseType):
     """
 
     def decorator(form_content: dict):
-        json_response = func(form_content)
-
-        # send a delayed response to response_url
         response_url = form_content["response_url"]
-        json_response['response_type'] = response_type.value
 
-        requests.post(response_url, json=json_response)
+        try:
+            json_response = func(form_content)
+        except Exception:
+            error_json = {
+                'text': "500 Internal Server Error: The server encountered an internal error and was unable to complete your request."
+                        " Either the server is overloaded or there is an error in the application.",
+                'response_type': ResponseType.EPHEMERAL.value
+            }
+
+            requests.post(response_url, json=error_json)
+            raise
+        else:
+            # send a delayed response to response_url
+            json_response['response_type'] = response_type.value
+            requests.post(response_url, json=json_response)
 
     return decorator
 
