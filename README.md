@@ -32,7 +32,7 @@ if __name__ == "__main__":
 ```
 
 Installation:
- - Python 3.6+ (or just use a virtualenv)
+ - Python3 (or just use a virtualenv)
  - Install dependencies
     - `pip install -r requirements.txt`
  - Create a file called `config.json` from `config.json.template`
