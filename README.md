@@ -3,7 +3,7 @@ Decorator for handling Slack slash commands using flask
 
 
 Example Usage:
-```$xslt
+```python
 from flask import Flask
 
 from myflask.flaskslack import FlaskSlack
