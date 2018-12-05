@@ -35,4 +35,5 @@ Installation:
  - Python 3.6+ (or just use a virtualenv)
  - Install dependencies
     - `pip install -r requirements.txt`
- - Create config.json, see config.json.template
+ - Create a file called `config.json` from `config.json.template`
+    - You can find your oauth token and signing secret [here](https://api.slack.com/apps/)
