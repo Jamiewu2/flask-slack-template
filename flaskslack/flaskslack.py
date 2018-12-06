@@ -3,7 +3,7 @@ from threading import Thread
 import requests
 from flask import abort, request, jsonify, Flask
 
-from myslack.slack import Slack, ResponseType
+from flaskslack.slack import Slack, ResponseType
 
 
 def parameterized(dec):
@@ -58,8 +58,8 @@ def delayed_message(func: callable, response_type: ResponseType):
 
 
 class FlaskSlack:
-    def __init__(self, name, slack: 'Slack' = Slack.create()):
-        self.app = Flask(name)
+    def __init__(self, app: 'Flask', slack: 'Slack' = Slack.create()):
+        self.app = app
         self.slack = slack
 
     @parameterized_decorator_instance
@@ -88,6 +88,3 @@ class FlaskSlack:
             # immediately return 200
             return jsonify({'response_type': response_type.value})
         return decorator
-
-    def run(self, *args, **kwargs):
-        self.app.run(*args, **kwargs)
