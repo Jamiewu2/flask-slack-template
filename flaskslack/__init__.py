@@ -1,1 +1,1 @@
-name = "flask_slack"
+name = "flask_slack_template"

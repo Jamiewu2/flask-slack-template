@@ -38,9 +38,23 @@ if __name__ == "__main__":
     app.run(host="localhost")
 ```
 
+
+
 Installation:
- - Python3 (or just use a virtualenv)
- - Install dependencies
-    - `pip install -r requirements.txt`
- - Create a file called `config.json` from `config.json.template`
+ - `pip install flask_slack_template`
+ - Create a file called `config.json` in the root directory with the slack oauth token and signing secret
+    ```json
+    {
+      "SLACK_OAUTH_TOKEN": "xoxp-10686179668-329471753335-492869313269-9948ff59af9a4bacc385f64d03b712e1",
+      "SLACK_SIGNING_SECRET": "e0623d901f2e3a4582105839520c9be0"
+    }
+    ```
+    ```python
+    # main.py   
+ 
+    slack = Slack.create()
+    # If you want to get your config in a non default way,
+    # you can create a slack client with: Slack('slack_oauth_token', 'slack_signing_secret')
+    # slack = Slack('slack_oauth_token', 'slack_signing_secret')
+    ```
     - You can find your oauth token and signing secret [here](https://api.slack.com/apps/)
