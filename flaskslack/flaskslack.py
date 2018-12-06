@@ -15,7 +15,9 @@ def parameterized(dec):
 
 
 def parameterized_decorator_instance(dec):
-    """Meta-decorator that allows an instance method decorator to have parameters"""
+    """
+    Meta-decorator that allows an instance method decorator to have parameters
+    """
     def layer(self, *args, **kwargs):
         def repl(f):
             return dec(self, f, *args, **kwargs)
@@ -64,8 +66,11 @@ class FlaskSlack:
 
     @parameterized_decorator_instance
     def slack_route(self, func: callable, route: str, response_type: ResponseType, verify_signature: bool=True):
-        """a decorator method that wraps an implementation method to allow for receiving and responding to slack
-        slash commands """
+        """
+        a decorator method that wraps an implementation method to allow for receiving and responding to slack
+        slash commands
+        """
+
         @self.app.route(route, methods=['POST'])
         def decorator():
             # verify that the request is from slack

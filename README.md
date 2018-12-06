@@ -1,14 +1,19 @@
 # flask-slack-template
-A light decorator around flask to remove the boilerplate for handling Slack slash commands
+A light decorator around flask and slack to remove the boilerplate for handling Slack slash commands
 
 
 Example Usage:
 ```python
-from myflask.flaskslack import FlaskSlack
-from myslack.slack import ResponseType
+from flask import Flask
 
-flask_slack = FlaskSlack(__name__)
-slack = flask_slack.slack
+from flaskslack.flaskslack import FlaskSlack
+from flaskslack.slack import ResponseType, Slack
+
+app = Flask(__name__)
+# If you want to get your config in a non default way,
+# you can create a slack client with: Slack('slack_oauth_token', 'slack_signing_secret')
+slack = Slack.create()
+flask_slack = FlaskSlack(app, slack)
 
 
 # set verify_signature to False if you want to do some local testing
@@ -26,11 +31,11 @@ def get_channel_member_ids(form_content):
     channel_member_ids = members_form_content["members"]
 
     text_response = f"The channel_member_ids for channel_id {channel_id} is: {channel_member_ids}"
-    return {'text': text_response}
+    return Slack.create_response(text_response)
 
 
 if __name__ == "__main__":
-    flask_slack.run(host="localhost")
+    app.run(host="localhost")
 ```
 
 Installation:
