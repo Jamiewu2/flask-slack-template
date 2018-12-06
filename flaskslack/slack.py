@@ -9,6 +9,8 @@ from typing import List
 
 from slackclient import SlackClient
 
+from flaskslack.attachment import Attachment
+
 
 class ResponseType(Enum):
     """
@@ -81,12 +83,12 @@ class Slack:
             return result == 0
 
     @staticmethod
-    def create_response(text: str, attachments: List[str] = []) -> dict:
+    def create_response(text: str, attachments: List[Attachment] = []) -> dict:
         def convert_text_to_dict(string: str):
             return {'text': string}
 
         response = convert_text_to_dict(text)
-        response['attachments'] = list(map(convert_text_to_dict, attachments))
+        response['attachments'] = list(map(lambda x: x.asdict(), attachments))
         return response
 
     @staticmethod
