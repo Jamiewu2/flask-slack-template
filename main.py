@@ -25,7 +25,7 @@ def get_channel_member_ids(form_content):
     channel_member_ids = members_form_content["members"]
 
     text_response = f"The channel_member_ids for channel_id {channel_id} is: {channel_member_ids}"
-    return {'text': text_response}
+    return Slack.create_response(text_response)
 
 
 if __name__ == "__main__":

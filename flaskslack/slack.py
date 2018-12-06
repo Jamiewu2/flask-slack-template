@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from enum import Enum
+from typing import List
 
 from slackclient import SlackClient
 
@@ -78,6 +79,15 @@ class Slack:
                 for x, y in zip(request_hash, signature):
                     result |= ord(x) ^ ord(y)
             return result == 0
+
+    @staticmethod
+    def create_response(text: str, attachments: List[str] = []) -> dict:
+        def convert_text_to_dict(string: str):
+            return {'text': string}
+
+        response = convert_text_to_dict(text)
+        response['attachments'] = list(map(convert_text_to_dict, attachments))
+        return response
 
     @staticmethod
     def create() -> 'Slack':
