@@ -63,7 +63,7 @@ class FlaskSlack:
         self.slack = slack
 
     @parameterized_decorator_instance
-    def slack_route(self, func: callable, route, response_type: ResponseType, verify_signature: bool=True):
+    def slack_route(self, func: callable, route: str, response_type: ResponseType, verify_signature: bool=True):
         """a decorator method that wraps an implementation method to allow for receiving and responding to slack
         slash commands """
         @self.app.route(route, methods=['POST'])
