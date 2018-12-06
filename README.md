@@ -45,8 +45,8 @@ Installation:
  - Create a file called `config.json` in the root directory with the slack oauth token and signing secret
     ```json
     {
-      "SLACK_OAUTH_TOKEN": "xoxp-10686179668-329471753335-492869313269-9948ff59af9a4bacc385f64d03b712e1",
-      "SLACK_SIGNING_SECRET": "e0623d901f2e3a4582105839520c9be0"
+      "SLACK_OAUTH_TOKEN": "YOUR_TOKEN_HERE",
+      "SLACK_SIGNING_SECRET": "YOUR_SECRET_HERE"
     }
     ```
     ```python
