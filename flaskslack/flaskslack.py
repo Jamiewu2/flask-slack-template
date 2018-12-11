@@ -1,7 +1,8 @@
+import json
 from threading import Thread
 
 import requests
-from flask import abort, request, jsonify, Flask
+from flask import abort, request, jsonify, Flask, make_response
 
 from flaskslack.slack import Slack, ResponseType
 
@@ -29,7 +30,6 @@ def delayed_message(func: callable, response_type: ResponseType):
     """
     Sends a POST request to the response_url located in the form_content.
     See: https://api.slack.com/slash-commands#sending_delayed_responses
-
     :param func: The actual implementation function that does the logic.
             It should return a dict. dict should contain 'text', and/or a list of 'attachments'.
             See: https://api.slack.com/slash-commands#responding_immediate_response
@@ -38,7 +38,16 @@ def delayed_message(func: callable, response_type: ResponseType):
     """
 
     def decorator(form_content: dict):
+
+        # if response_url does not exist,
+        # then the form_content might be wrapped inside a "payload"
+        if "response_url" not in form_content:
+            if "payload" not in form_content:
+                raise ValueError("response_url or payload not in form_content")
+            form_content = json.loads(form_content["payload"])
+
         response_url = form_content["response_url"]
+        print(form_content)
 
         try:
             json_response = func(form_content)
@@ -65,13 +74,21 @@ class FlaskSlack:
         self.slack = slack
 
     @parameterized_decorator_instance
-    def slack_route(self, func: callable, route: str, response_type: ResponseType, verify_signature: bool=True):
+    def slack_route(self, func: callable, route: str, response_type: ResponseType,
+                    verify_signature: bool=True, empty_immediate_response: bool=False):
         """
         a decorator method that wraps an implementation method to allow for receiving and responding to slack
         slash commands
+        :param func: the function to run
+        :param route: the slack endpoint to route traffic from
+        :param response_type: If EPHEMERAL, posts will only be to the calling user, if IN_CHANNEL, the slack message
+        will be public
+        :param verify_signature: should almost always be true. Set this to false if you need to debug locally
+        :param empty_immediate_response: If true, returns an empty immediate response no matter what. This is necessary
+        to deal with some weirdness while dealing with interactive messages
         """
 
-        @self.app.route(route, methods=['POST'])
+        @self.app.route(route, methods=['POST'], endpoint=route)  # TODO endpoint hack to fix name conflict
         def decorator():
             # verify that the request is from slack
             if verify_signature:
@@ -90,6 +107,9 @@ class FlaskSlack:
             thread = Thread(target=delayed_message_func, args=(form_content,))
             thread.start()
 
-            # immediately return 200
-            return jsonify({'response_type': response_type.value})
+            # immediately return 200 OK to let slack know that the message has been received
+            if empty_immediate_response:
+                return make_response("", 200)
+            else:
+                return jsonify({"response_type": response_type.value})
         return decorator

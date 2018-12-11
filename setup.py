@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="flask_slack_template",
-    version="0.0.1",
+    version="0.0.3",
     author="Jamie WU",
     author_email="jamiewu2@illinois.com",
     description="A light decorator around flask and slack to remove the boilerplate for handling Slack slash commands",

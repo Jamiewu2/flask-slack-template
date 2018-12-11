@@ -2,6 +2,9 @@ from dataclasses import dataclass, field, asdict
 from typing import List
 
 
+# TODO build out all dataclasses according to Slack API documentation
+# (which is just all over the place and hard to consolidate)
+
 @dataclass
 class Field:
     title: str = None
@@ -26,6 +29,36 @@ class Attachment:
     footer: str = None
     footer_icon: str = None
     ts: int = None  # timestamp
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass
+class Action:
+    """
+    https://api.slack.com/docs/message-buttons
+    """
+    name: str = None
+    text: str = None
+    type: str = "button"
+    value: str = None
+
+
+@dataclass
+class ButtonAttachment(Attachment):
+    """
+    Data class for Attachments with buttons
+    https://api.slack.com/docs/interactive-message-field-guide
+    """
+    text: str = None
+    fallback: str = "default fallback"
+    callback_id: str = None
+    color: str = "#123456"
+    attachment_type: str = "default"
+    actions: List[Action] = None
+    confirm = None  # TODO confirm textbox
+    footer: str = None
 
     def asdict(self):
         return asdict(self)
