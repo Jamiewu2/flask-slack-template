@@ -47,7 +47,6 @@ def delayed_message(func: callable, response_type: ResponseType):
             form_content = json.loads(form_content["payload"])
 
         response_url = form_content["response_url"]
-        print(form_content)
 
         try:
             json_response = func(form_content)
