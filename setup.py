@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="flask_slack_template",
-    version="0.0.4",
-    author="Jamie WU",
+    version="0.0.7",
+    author="Jamie Wu",
     author_email="jamiewu2@illinois.com",
     description="A light decorator around flask and slack to remove the boilerplate for handling Slack slash commands",
     long_description=long_description,
@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'Flask',
-        'slackclient',
+        'slackclient>=1,<2',
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
